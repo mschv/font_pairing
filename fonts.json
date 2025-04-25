@@ -1,0 +1,65 @@
+{
+  "Playfair Display": {
+    "Professional": ["Source Sans Pro", "Roboto", "IBM Plex Sans"],
+    "Creative": ["Nunito", "Lato", "Montserrat"],
+    "Elegant": ["Lato", "Cormorant Garamond", "Merriweather"],
+    "Modern": ["Work Sans", "Open Sans", "Inter"],
+    "Bold": ["Open Sans", "Source Sans Pro", "Raleway"]
+  },
+  "Montserrat": {
+    "Professional": ["Roboto", "Source Sans Pro", "IBM Plex Sans"],
+    "Creative": ["Lora", "Nunito", "Playfair Display"],
+    "Elegant": ["Merriweather", "Libre Baskerville", "Lora"],
+    "Modern": ["Open Sans", "Work Sans", "Inter"],
+    "Bold": ["Source Sans Pro", "Raleway", "Roboto"]
+  },
+  "Oswald": {
+    "Professional": ["Roboto", "Source Sans Pro", "Open Sans"],
+    "Creative": ["Lato", "Nunito", "Montserrat"],
+    "Elegant": ["Merriweather", "Libre Baskerville", "Lora"],
+    "Modern": ["Open Sans", "Work Sans", "Inter"],
+    "Bold": ["Source Sans Pro", "Roboto", "Nunito Sans"]
+  },
+  "Lora": {
+    "Professional": ["Roboto Slab", "Source Sans Pro", "Open Sans"],
+    "Creative": ["Montserrat", "Nunito", "Quicksand"],
+    "Elegant": ["Open Sans", "Cormorant Garamond", "Lato"],
+    "Modern": ["Work Sans", "IBM Plex Sans", "Inter"],
+    "Bold": ["Raleway", "Montserrat", "Source Sans Pro"]
+  },
+  "Raleway": {
+    "Professional": ["IBM Plex Sans", "Source Sans Pro", "Open Sans"],
+    "Creative": ["Nunito", "Montserrat", "Quicksand"],
+    "Elegant": ["Lora", "Playfair Display", "Libre Baskerville"],
+    "Modern": ["Open Sans", "Work Sans", "Inter"],
+    "Bold": ["Poppins", "Montserrat", "Oswald"]
+  },
+  "Libre Baskerville": {
+    "Professional": ["Work Sans", "IBM Plex Sans", "Source Sans Pro"],
+    "Creative": ["Montserrat", "Raleway", "Nunito"],
+    "Elegant": ["Source Sans Pro", "Open Sans", "Lato"],
+    "Modern": ["Open Sans", "Work Sans", "Roboto"],
+    "Bold": ["Roboto", "Montserrat", "Oswald"]
+  },
+  "Poppins": {
+    "Professional": ["Nunito Sans", "Source Sans Pro", "Open Sans"],
+    "Creative": ["Lora", "Playfair Display", "Nunito"],
+    "Elegant": ["Playfair Display", "Cormorant Garamond", "Libre Baskerville"],
+    "Modern": ["Work Sans", "IBM Plex Sans", "Inter"],
+    "Bold": ["Oswald", "Montserrat", "Roboto"]
+  },
+  "Abril Fatface": {
+    "Professional": ["Roboto", "Source Sans Pro", "Open Sans"],
+    "Creative": ["Lato", "Nunito", "Montserrat"],
+    "Elegant": ["Merriweather", "Libre Baskerville", "Playfair Display"],
+    "Modern": ["Work Sans", "IBM Plex Sans", "Inter"],
+    "Bold": ["Oswald", "Montserrat", "Open Sans"]
+  },
+  "Quicksand": {
+    "Professional": ["Roboto", "IBM Plex Sans", "Source Sans Pro"],
+    "Creative": ["Nunito", "Montserrat", "Lato"],
+    "Elegant": ["Playfair Display", "Lora", "Libre Baskerville"],
+    "Modern": ["Open Sans", "Work Sans", "Inter"],
+    "Bold": ["Oswald", "Poppins", "Montserrat"]
+  }
+}
