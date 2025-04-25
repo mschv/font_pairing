@@ -7,63 +7,87 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Montserrat&family=Oswald&family=Lora&family=Raleway&family=Libre+Baskerville&family=Poppins&family=Abril+Fatface&family=Quicksand&family=Source+Sans+Pro&family=Roboto&family=IBM+Plex+Sans&family=Nunito&family=Lato&family=Cormorant+Garamond&family=Merriweather&family=Work+Sans&family=Open+Sans&family=Inter&family=Roboto+Slab&family=Nunito+Sans&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: sans-serif;
+      font-family: 'Source Sans Pro', sans-serif;
       background: #f9fafb;
       margin: 0;
       padding: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
     }
     .container {
       max-width: 800px;
       margin: auto;
       background: white;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      padding: 3rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     }
     h1 {
-      font-size: 24px;
+      font-size: 28px;
       text-align: center;
-      margin-bottom: 1rem;
+      margin-bottom: 2rem;
+      color: #333;
     }
     .section {
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
     }
     label {
       display: block;
-      margin-bottom: 0.5rem;
-      font-weight: bold;
+      margin-bottom: 0.75rem;
+      font-size: 1.1rem;
+      color: #333;
     }
     select, button {
-      padding: 0.5rem;
+      padding: 0.75rem;
       font-size: 1rem;
       width: 100%;
-      margin-bottom: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      margin-bottom: 1.25rem;
+      transition: border 0.3s ease;
+    }
+    select:hover, button:hover {
+      border-color: #3b82f6;
     }
     button.copy-btn {
       background: #3b82f6;
       color: white;
       border: none;
       cursor: pointer;
-      margin-top: 0.5rem;
+      transition: background 0.3s ease;
     }
-    .vibe-buttons button {
-      display: inline-block;
-      margin: 0.25rem;
-      padding: 0.5rem 1rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      background: #f0f0f0;
-      cursor: pointer;
-    }
-    .vibe-buttons button.active {
-      background: #e0ecff;
-      border-color: #3b82f6;
+    button.copy-btn:hover {
+      background: #2563eb;
     }
     .preview {
       margin-top: 1.5rem;
-      padding: 1rem;
+      padding: 2rem;
       border: 1px dashed #ccc;
       text-align: center;
+      border-radius: 10px;
+    }
+    .preview h2 {
+      font-size: 36px;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+    .preview p {
+      font-size: 18px;
+      color: #555;
+    }
+    select {
+      font-size: 1.1rem;
+      font-family: 'Source Sans Pro', sans-serif;
+      padding: 0.75rem;
+      border-radius: 8px;
+    }
+    .vibe-section select {
+      font-size: 1.1rem;
+      padding: 0.75rem;
+      border-radius: 8px;
+      margin-top: 1rem;
     }
   </style>
 </head>
@@ -71,28 +95,28 @@
   <div class="container">
     <h1>Font Pairing Explorer</h1>
 
-    <div class="section">
-      <label>1. Choose a vibe</label>
-      <div class="vibe-buttons" id="vibe-buttons"></div>
-      <p id="vibe-description" style="font-size: 0.85rem; color: #666; font-style: italic;"></p>
+    <div class="section vibe-section">
+      <label for="vibe-dropdown">1. Choose a vibe</label>
+      <select id="vibe-dropdown"></select>
+      <p id="vibe-description" style="font-size: 0.9rem; color: #666; font-style: italic;"></p>
     </div>
 
     <div class="section">
-      <label>2. Select heading font</label>
+      <label for="heading-font">2. Select heading font</label>
       <select id="heading-font"></select>
     </div>
 
     <div class="section">
-      <label>3. Select body font</label>
+      <label for="body-font">3. Select body font</label>
       <select id="body-font"></select>
     </div>
-
-    <button class="copy-btn" onclick="copyFontPairing()">Copy Pairing</button>
 
     <div class="preview" id="preview">
       <h2 id="preview-heading">Sample Heading</h2>
       <p id="preview-body">This is a preview of the body font based on your selection.</p>
     </div>
+
+    <button class="copy-btn" onclick="copyFontPairing()">Copy Pairing</button>
   </div>
 
   <script>
@@ -121,16 +145,34 @@
 
     const headingFontSelect = document.getElementById("heading-font");
     const bodyFontSelect = document.getElementById("body-font");
-    const vibeButtonsContainer = document.getElementById("vibe-buttons");
+    const vibeDropdown = document.getElementById("vibe-dropdown");
     const vibeDescription = document.getElementById("vibe-description");
     const previewHeading = document.getElementById("preview-heading");
     const previewBody = document.getElementById("preview-body");
 
     function initializePage() {
+      populateVibeDropdown();
       populateHeadingFonts();
-      setupVibeButtons();
       populateBodyFonts();
       updatePreview();
+    }
+
+    function populateVibeDropdown() {
+      vibeDropdown.innerHTML = "";
+      vibes.forEach(vibe => {
+        const option = document.createElement("option");
+        option.value = vibe;
+        option.textContent = vibe;
+        vibeDropdown.appendChild(option);
+      });
+      vibeDropdown.value = selectedVibe;
+      vibeDropdown.onchange = () => {
+        selectedVibe = vibeDropdown.value;
+        vibeDescription.textContent = vibeDescriptions[selectedVibe];
+        populateBodyFonts();
+        updatePreview();
+      };
+      vibeDescription.textContent = vibeDescriptions[selectedVibe];
     }
 
     function populateHeadingFonts() {
@@ -142,6 +184,13 @@
         option.style.fontFamily = font;
         headingFontSelect.appendChild(option);
       });
+      headingFontSelect.value = selectedHeading;
+      headingFontSelect.onchange = (e) => {
+        selectedHeading = e.target.value;
+        populateBodyFonts();
+        updatePreview();
+      };
+      updateFontStyles(headingFontSelect);
     }
 
     function populateBodyFonts() {
@@ -154,38 +203,21 @@
         option.style.fontFamily = font;
         bodyFontSelect.appendChild(option);
       });
+      bodyFontSelect.onchange = updatePreview;
+      updateFontStyles(bodyFontSelect);
+    }
+
+    function updateFontStyles(selectElement) {
+      const options = selectElement.querySelectorAll('option');
+      options.forEach(option => {
+        option.style.fontFamily = option.value;
+      });
     }
 
     function updatePreview() {
       previewHeading.style.fontFamily = headingFontSelect.value;
       previewBody.style.fontFamily = bodyFontSelect.value;
     }
-
-    function setupVibeButtons() {
-      vibeButtonsContainer.innerHTML = "";
-      vibes.forEach(vibe => {
-        const btn = document.createElement("button");
-        btn.textContent = vibe;
-        btn.className = vibe === selectedVibe ? "active" : "";
-        btn.onclick = () => {
-          selectedVibe = vibe;
-          vibeDescription.textContent = vibeDescriptions[vibe];
-          setupVibeButtons();
-          populateBodyFonts();
-          updatePreview();
-        };
-        vibeButtonsContainer.appendChild(btn);
-      });
-      vibeDescription.textContent = vibeDescriptions[selectedVibe];
-    }
-
-    headingFontSelect.onchange = (e) => {
-      selectedHeading = e.target.value;
-      populateBodyFonts();
-      updatePreview();
-    };
-
-    bodyFontSelect.onchange = updatePreview;
 
     function copyFontPairing() {
       const pairing = `Heading: ${headingFontSelect.value}\nBody: ${bodyFontSelect.value}\nStyle: ${selectedVibe}`;
