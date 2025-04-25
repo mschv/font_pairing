@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Font Pairing Widget</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Playfair+Display&family=Roboto&family=Inter&family=Open+Sans&family=Raleway&family=Merriweather&family=Montserrat&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: Inter, sans-serif;
+      padding: 2rem;
+      background-color: #fff;
+      color: #333;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 16px;
+      font-size: 16px;
+    }
+
+    .preview {
+      margin-top: 24px;
+    }
+
+    .preview h2 {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .preview p {
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Font Pairing Widget</h1>
+
+    <label for="titleFont">Select Title Font</label>
+    <select id="titleFont">
+      <option value="'DM Serif Display', serif">DM Serif Display</option>
+      <option value="'Playfair Display', serif">Playfair Display</option>
+      <option value="'Merriweather', serif">Merriweather</option>
+      <option value="'Montserrat', sans-serif">Montserrat</option>
+    </select>
+
+    <label for="bodyFont">Select Body Font</label>
+    <select id="bodyFont">
+      <option value="'Roboto', sans-serif">Roboto</option>
+      <option value="'Inter', sans-serif" selected>Inter</option>
+      <option value="'Open Sans', sans-serif">Open Sans</option>
+      <option value="'Raleway', sans-serif">Raleway</option>
+    </select>
+
+    <div class="preview">
+      <h2 id="titlePreview">Your Title Here</h2>
+      <p id="bodyPreview">This is a preview of your body text. Try changing the fonts above to see how they pair together!</p>
+    </div>
+  </div>
+
+  <script>
+    const titleFontSelect = document.getElementById('titleFont');
+    const bodyFontSelect = document.getElementById('bodyFont');
+    const titlePreview = document.getElementById('titlePreview');
+    const bodyPreview = document.getElementById('bodyPreview');
+
+    function updateFonts() {
+      titlePreview.style.fontFamily = titleFontSelect.value;
+      bodyPreview.style.fontFamily = bodyFontSelect.value;
+    }
+
+    titleFontSelect.addEventListener('change', updateFonts);
+    bodyFontSelect.addEventListener('change', updateFonts);
+
+    // Initialize fonts on page load
+    updateFonts();
+  </script>
+</body>
+</html>
+
