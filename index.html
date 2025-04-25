@@ -4,52 +4,35 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Font Pairing Widget</title>
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Playfair+Display&family=Roboto&family=Inter&family=Open+Sans&family=Raleway&family=Merriweather&family=Montserrat&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Playfair+Display&family=Merriweather&family=Montserrat&family=Roboto&family=Inter&family=Open+Sans&family=Raleway&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: Inter, sans-serif;
-      padding: 2rem;
-      background-color: #fff;
-      color: #333;
+      padding: 20px;
+      background: #f9fafb;
+      color: #111827;
     }
-
     .container {
       max-width: 600px;
-      margin: 0 auto;
+      margin: auto;
     }
-
-    h1 {
-      font-size: 24px;
-      margin-bottom: 16px;
-    }
-
-    label {
+    label, select {
       display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
+      margin-top: 15px;
     }
-
     select {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 16px;
-      font-size: 16px;
+      padding: 5px;
+      margin-top: 5px;
     }
-
     .preview {
-      margin-top: 24px;
+      margin-top: 30px;
+      border-top: 1px solid #ccc;
+      padding-top: 20px;
     }
-
-    .preview h2 {
-      font-size: 32px;
-      margin-bottom: 8px;
-    }
-
-    .preview p {
-      font-size: 16px;
+    .vibe-note {
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: #6b7280;
     }
   </style>
 </head>
@@ -57,6 +40,19 @@
   <div class="container">
     <h1>Font Pairing Widget</h1>
 
+    <!-- ✅ Vibe note -->
+    <p class="vibe-note">Choose fonts that match your vibe 🪄</p>
+
+    <!-- ✅ Vibe selector -->
+    <label for="vibeSelect">Choose a Vibe</label>
+    <select id="vibeSelect">
+      <option value="">-- Select a vibe --</option>
+      <option value="elegant">Elegant (DM Serif Display + Inter)</option>
+      <option value="minimal">Minimal (Montserrat + Raleway)</option>
+      <option value="classic">Classic (Playfair Display + Merriweather)</option>
+    </select>
+
+    <!-- Manual font selectors -->
     <label for="titleFont">Select Title Font</label>
     <select id="titleFont">
       <option value="'DM Serif Display', serif">DM Serif Display</option>
@@ -80,22 +76,42 @@
   </div>
 
   <script>
-    const titleFontSelect = document.getElementById('titleFont');
-    const bodyFontSelect = document.getElementById('bodyFont');
-    const titlePreview = document.getElementById('titlePreview');
-    const bodyPreview = document.getElementById('bodyPreview');
+    const titleFontSelect = document.getElementById("titleFont");
+    const bodyFontSelect = document.getElementById("bodyFont");
+    const vibeSelect = document.getElementById("vibeSelect");
 
-    function updateFonts() {
+    const titlePreview = document.getElementById("titlePreview");
+    const bodyPreview = document.getElementById("bodyPreview");
+
+    function updatePreviewFonts() {
       titlePreview.style.fontFamily = titleFontSelect.value;
       bodyPreview.style.fontFamily = bodyFontSelect.value;
     }
 
-    titleFontSelect.addEventListener('change', updateFonts);
-    bodyFontSelect.addEventListener('change', updateFonts);
+    titleFontSelect.addEventListener("change", updatePreviewFonts);
+    bodyFontSelect.addEventListener("change", updatePreviewFonts);
 
-    // Initialize fonts on page load
-    updateFonts();
+    vibeSelect.addEventListener("change", () => {
+      switch (vibeSelect.value) {
+        case "elegant":
+          titleFontSelect.value = "'DM Serif Display', serif";
+          bodyFontSelect.value = "'Inter', sans-serif";
+          break;
+        case "minimal":
+          titleFontSelect.value = "'Montserrat', sans-serif";
+          bodyFontSelect.value = "'Raleway', sans-serif";
+          break;
+        case "classic":
+          titleFontSelect.value = "'Playfair Display', serif";
+          bodyFontSelect.value = "'Merriweather', serif";
+          break;
+        default:
+          return;
+      }
+      updatePreviewFonts();
+    });
+
+    updatePreviewFonts();
   </script>
 </body>
 </html>
-
