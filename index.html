@@ -2,116 +2,134 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Font Pairing Widget</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Playfair+Display&family=Merriweather&family=Montserrat&family=Roboto&family=Inter&family=Open+Sans&family=Raleway&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: Inter, sans-serif;
+      font-family: Arial, sans-serif;
       padding: 20px;
-      background: #f9fafb;
-      color: #111827;
+      background-color: #f9f9f9;
     }
-    .container {
-      max-width: 600px;
-      margin: auto;
-    }
-    label, select {
+    label {
       display: block;
-      margin-top: 15px;
+      margin-top: 10px;
+      font-weight: bold;
     }
-    select {
-      padding: 5px;
+    select, button {
       margin-top: 5px;
+      padding: 8px;
+      font-size: 16px;
     }
-    .preview {
-      margin-top: 30px;
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .font-preview {
+      margin-top: 10px;
+      padding: 10px;
       border-top: 1px solid #ccc;
-      padding-top: 20px;
-    }
-    .vibe-note {
-      margin-bottom: 12px;
-      font-size: 14px;
-      color: #6b7280;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Font Pairing Widget</h1>
+  <h1>Font Pairing Widget</h1>
 
-    <!-- ✅ Vibe note -->
-    <p class="vibe-note">Choose fonts that match your vibe 🪄</p>
+  <label for="vibe">Choose a vibe:</label>
+  <select id="vibe">
+    <option value="Professional">Professional</option>
+    <option value="Playful">Playful</option>
+    <option value="Minimalist">Minimalist</option>
+    <option value="Elegant">Elegant</option>
+    <option value="Bold & Modern">Bold & Modern</option>
+  </select>
 
-    <!-- ✅ Vibe selector -->
-    <label for="vibeSelect">Choose a Vibe</label>
-    <select id="vibeSelect">
-      <option value="">-- Select a vibe --</option>
-      <option value="elegant">Elegant (DM Serif Display + Inter)</option>
-      <option value="minimal">Minimal (Montserrat + Raleway)</option>
-      <option value="classic">Classic (Playfair Display + Merriweather)</option>
-    </select>
+  <label for="headingFont">Choose a heading font:</label>
+  <select id="headingFont"></select>
 
-    <!-- Manual font selectors -->
-    <label for="titleFont">Select Title Font</label>
-    <select id="titleFont">
-      <option value="'DM Serif Display', serif">DM Serif Display</option>
-      <option value="'Playfair Display', serif">Playfair Display</option>
-      <option value="'Merriweather', serif">Merriweather</option>
-      <option value="'Montserrat', sans-serif">Montserrat</option>
-    </select>
+  <button onclick="generateFontPairing()">Generate Pairing</button>
 
-    <label for="bodyFont">Select Body Font</label>
-    <select id="bodyFont">
-      <option value="'Roboto', sans-serif">Roboto</option>
-      <option value="'Inter', sans-serif" selected>Inter</option>
-      <option value="'Open Sans', sans-serif">Open Sans</option>
-      <option value="'Raleway', sans-serif">Raleway</option>
-    </select>
-
-    <div class="preview">
-      <h2 id="titlePreview">Your Title Here</h2>
-      <p id="bodyPreview">This is a preview of your body text. Try changing the fonts above to see how they pair together!</p>
-    </div>
-  </div>
+  <div class="result" id="result"></div>
 
   <script>
-    const titleFontSelect = document.getElementById("titleFont");
-    const bodyFontSelect = document.getElementById("bodyFont");
-    const vibeSelect = document.getElementById("vibeSelect");
+    const fontOptions = {
+      "Professional": ["Playfair Display", "Montserrat", "Lora"],
+      "Playful": ["Pacifico", "Chewy", "Caveat"],
+      "Minimalist": ["Inter", "Raleway", "Poppins"],
+      "Elegant": ["Cinzel", "Cormorant Garamond", "Great Vibes"],
+      "Bold & Modern": ["Bebas Neue", "Anton", "Oswald"]
+    };
 
-    const titlePreview = document.getElementById("titlePreview");
-    const bodyPreview = document.getElementById("bodyPreview");
+    const bodyFontOptions = {
+      "Professional": {
+        "Playfair Display": ["Open Sans", "Roboto", "Lato"],
+        "Montserrat": ["Open Sans", "Roboto", "Lato"],
+        "Lora": ["Open Sans", "Lato", "Roboto"]
+      },
+      "Playful": {
+        "Pacifico": ["Quicksand", "Comic Neue", "Lato"],
+        "Chewy": ["Comic Neue", "Quicksand", "Lato"],
+        "Caveat": ["Comic Neue", "Lato", "Quicksand"]
+      },
+      "Minimalist": {
+        "Inter": ["Open Sans", "Lato", "Roboto"],
+        "Raleway": ["Inter", "Lato", "Open Sans"],
+        "Poppins": ["Lato", "Inter", "Roboto"]
+      },
+      "Elegant": {
+        "Cinzel": ["Lora", "Playfair Display", "Open Sans"],
+        "Cormorant Garamond": ["Lora", "Playfair Display", "Roboto"],
+        "Great Vibes": ["Lora", "Playfair Display", "Open Sans"]
+      },
+      "Bold & Modern": {
+        "Bebas Neue": ["Roboto", "Inter", "Lato"],
+        "Anton": ["Open Sans", "Lato", "Roboto"],
+        "Oswald": ["Roboto", "Open Sans", "Inter"]
+      }
+    };
 
-    function updatePreviewFonts() {
-      titlePreview.style.fontFamily = titleFontSelect.value;
-      bodyPreview.style.fontFamily = bodyFontSelect.value;
+    const vibeSelect = document.getElementById("vibe");
+    const headingFontSelect = document.getElementById("headingFont");
+
+    vibeSelect.addEventListener("change", updateHeadingFonts);
+
+    function updateHeadingFonts() {
+      const selectedVibe = vibeSelect.value;
+      const fonts = fontOptions[selectedVibe] || [];
+
+      headingFontSelect.innerHTML = "";
+      fonts.forEach(font => {
+        const option = document.createElement("option");
+        option.value = font;
+        option.textContent = font;
+        headingFontSelect.appendChild(option);
+      });
     }
 
-    titleFontSelect.addEventListener("change", updatePreviewFonts);
-    bodyFontSelect.addEventListener("change", updatePreviewFonts);
+    function generateFontPairing() {
+      const vibe = vibeSelect.value;
+      const headingFont = headingFontSelect.value;
+      const bodyFonts = (bodyFontOptions[vibe] && bodyFontOptions[vibe][headingFont]) || ["Open Sans", "Lato"];
 
-    vibeSelect.addEventListener("change", () => {
-      switch (vibeSelect.value) {
-        case "elegant":
-          titleFontSelect.value = "'DM Serif Display', serif";
-          bodyFontSelect.value = "'Inter', sans-serif";
-          break;
-        case "minimal":
-          titleFontSelect.value = "'Montserrat', sans-serif";
-          bodyFontSelect.value = "'Raleway', sans-serif";
-          break;
-        case "classic":
-          titleFontSelect.value = "'Playfair Display', serif";
-          bodyFontSelect.value = "'Merriweather', serif";
-          break;
-        default:
-          return;
-      }
-      updatePreviewFonts();
-    });
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = `
+        <div><strong>Heading Font:</strong> ${headingFont}</div>
+        <div><strong>Body Font Suggestions:</strong></div>
+        <ul>
+          ${bodyFonts.map(font => `<li>${font}</li>`).join('')}
+        </ul>
+        <div class="font-preview" style="font-family: '${headingFont}', sans-serif;">
+          Heading Preview: Introducing the Future of Digital Branding
+        </div>
+        <div class="font-preview" style="font-family: '${bodyFonts[0]}', sans-serif;">
+          Body Preview: Our comprehensive platform empowers professionals to manage their online presence with clarity and confidence.
+        </div>
+      `;
+    }
 
-    updatePreviewFonts();
+    updateHeadingFonts();
   </script>
 </body>
 </html>
