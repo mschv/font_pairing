@@ -3,133 +3,194 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Font Pairing Widget</title>
+  <title>Font Pairing Explorer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Montserrat&family=Oswald&family=Lora&family=Raleway&family=Libre+Baskerville&family=Poppins&family=Abril+Fatface&family=Quicksand&family=Source+Sans+Pro&family=Roboto&family=IBM+Plex+Sans&family=Nunito&family=Lato&family=Cormorant+Garamond&family=Merriweather&family=Work+Sans&family=Open+Sans&family=Inter&family=Roboto+Slab&family=Nunito+Sans&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background-color: #f9f9f9;
+      font-family: sans-serif;
+      background: #f9fafb;
+      margin: 0;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    h1 {
+      font-size: 24px;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .section {
+      margin-bottom: 1.5rem;
     }
     label {
       display: block;
-      margin-top: 10px;
+      margin-bottom: 0.5rem;
       font-weight: bold;
     }
     select, button {
-      margin-top: 5px;
-      padding: 8px;
-      font-size: 16px;
+      padding: 0.5rem;
+      font-size: 1rem;
+      width: 100%;
+      margin-bottom: 1rem;
     }
-    .result {
-      margin-top: 20px;
-      padding: 15px;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    button.copy-btn {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 0.5rem;
     }
-    .font-preview {
-      margin-top: 10px;
-      padding: 10px;
-      border-top: 1px solid #ccc;
+    .vibe-buttons button {
+      display: inline-block;
+      margin: 0.25rem;
+      padding: 0.5rem 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background: #f0f0f0;
+      cursor: pointer;
+    }
+    .vibe-buttons button.active {
+      background: #e0ecff;
+      border-color: #3b82f6;
+    }
+    .preview {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border: 1px dashed #ccc;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <h1>Font Pairing Widget</h1>
+  <div class="container">
+    <h1>Font Pairing Explorer</h1>
 
-  <label for="vibe">Choose a vibe:</label>
-  <select id="vibe">
-    <option value="Professional">Professional</option>
-    <option value="Playful">Playful</option>
-    <option value="Minimalist">Minimalist</option>
-    <option value="Elegant">Elegant</option>
-    <option value="Bold & Modern">Bold & Modern</option>
-  </select>
+    <div class="section">
+      <label>1. Choose a vibe</label>
+      <div class="vibe-buttons" id="vibe-buttons"></div>
+      <p id="vibe-description" style="font-size: 0.85rem; color: #666; font-style: italic;"></p>
+    </div>
 
-  <label for="headingFont">Choose a heading font:</label>
-  <select id="headingFont"></select>
+    <div class="section">
+      <label>2. Select heading font</label>
+      <select id="heading-font"></select>
+    </div>
 
-  <button onclick="generateFontPairing()">Generate Pairing</button>
+    <div class="section">
+      <label>3. Select body font</label>
+      <select id="body-font"></select>
+    </div>
 
-  <div class="result" id="result"></div>
+    <button class="copy-btn" onclick="copyFontPairing()">Copy Pairing</button>
+
+    <div class="preview" id="preview">
+      <h2 id="preview-heading">Sample Heading</h2>
+      <p id="preview-body">This is a preview of the body font based on your selection.</p>
+    </div>
+  </div>
 
   <script>
-    const fontOptions = {
-      "Professional": ["Playfair Display", "Montserrat", "Lora"],
-      "Playful": ["Pacifico", "Chewy", "Caveat"],
-      "Minimalist": ["Inter", "Raleway", "Poppins"],
-      "Elegant": ["Cinzel", "Cormorant Garamond", "Great Vibes"],
-      "Bold & Modern": ["Bebas Neue", "Anton", "Oswald"]
+    let fontPairs = {};
+    let selectedVibe = "Professional";
+    let selectedHeading = "Playfair Display";
+
+    // Cargar el JSON desde un archivo externo
+    fetch('fonts.json')
+      .then(response => response.json())
+      .then(data => {
+        fontPairs = data;
+        initializePage();
+      })
+      .catch(error => console.error('Error loading JSON:', error));
+
+    const vibes = ["Professional", "Creative", "Elegant", "Modern", "Bold"];
+
+    const vibeDescriptions = {
+      "Professional": "Clean and formal style suitable for business documents and corporate websites.",
+      "Creative": "Expressive style that adds personality to blogs and artistic projects.",
+      "Elegant": "Refined style perfect for invitations, luxury brands, and formal announcements.",
+      "Modern": "Contemporary look with clean lines ideal for tech startups and minimalist designs.",
+      "Bold": "Strong visual impact for headlines, advertisements, and attention-grabbing content."
     };
 
-    const bodyFontOptions = {
-      "Professional": {
-        "Playfair Display": ["Open Sans", "Roboto", "Lato"],
-        "Montserrat": ["Open Sans", "Roboto", "Lato"],
-        "Lora": ["Open Sans", "Lato", "Roboto"]
-      },
-      "Playful": {
-        "Pacifico": ["Quicksand", "Comic Neue", "Lato"],
-        "Chewy": ["Comic Neue", "Quicksand", "Lato"],
-        "Caveat": ["Comic Neue", "Lato", "Quicksand"]
-      },
-      "Minimalist": {
-        "Inter": ["Open Sans", "Lato", "Roboto"],
-        "Raleway": ["Inter", "Lato", "Open Sans"],
-        "Poppins": ["Lato", "Inter", "Roboto"]
-      },
-      "Elegant": {
-        "Cinzel": ["Lora", "Playfair Display", "Open Sans"],
-        "Cormorant Garamond": ["Lora", "Playfair Display", "Roboto"],
-        "Great Vibes": ["Lora", "Playfair Display", "Open Sans"]
-      },
-      "Bold & Modern": {
-        "Bebas Neue": ["Roboto", "Inter", "Lato"],
-        "Anton": ["Open Sans", "Lato", "Roboto"],
-        "Oswald": ["Roboto", "Open Sans", "Inter"]
-      }
-    };
+    const headingFontSelect = document.getElementById("heading-font");
+    const bodyFontSelect = document.getElementById("body-font");
+    const vibeButtonsContainer = document.getElementById("vibe-buttons");
+    const vibeDescription = document.getElementById("vibe-description");
+    const previewHeading = document.getElementById("preview-heading");
+    const previewBody = document.getElementById("preview-body");
 
-    const vibeSelect = document.getElementById("vibe");
-    const headingFontSelect = document.getElementById("headingFont");
+    function initializePage() {
+      populateHeadingFonts();
+      setupVibeButtons();
+      populateBodyFonts();
+      updatePreview();
+    }
 
-    vibeSelect.addEventListener("change", updateHeadingFonts);
-
-    function updateHeadingFonts() {
-      const selectedVibe = vibeSelect.value;
-      const fonts = fontOptions[selectedVibe] || [];
-
+    function populateHeadingFonts() {
       headingFontSelect.innerHTML = "";
-      fonts.forEach(font => {
+      Object.keys(fontPairs).forEach(font => {
         const option = document.createElement("option");
         option.value = font;
         option.textContent = font;
+        option.style.fontFamily = font;
         headingFontSelect.appendChild(option);
       });
     }
 
-    function generateFontPairing() {
-      const vibe = vibeSelect.value;
-      const headingFont = headingFontSelect.value;
-      const bodyFonts = (bodyFontOptions[vibe] && bodyFontOptions[vibe][headingFont]) || ["Open Sans", "Lato"];
-
-      const resultDiv = document.getElementById("result");
-      resultDiv.innerHTML = `
-        <div><strong>Heading Font:</strong> ${headingFont}</div>
-        <div><strong>Body Font Suggestions:</strong></div>
-        <ul>
-          ${bodyFonts.map(font => `<li>${font}</li>`).join('')}
-        </ul>
-        <div class="font-preview" style="font-family: '${headingFont}', sans-serif;">
-          Heading Preview: Introducing the Future of Digital Branding
-        </div>
-        <div class="font-preview" style="font-family: '${bodyFonts[0]}', sans-serif;">
-          Body Preview: Our comprehensive platform empowers professionals to manage their online presence with clarity and confidence.
-        </div>
-      `;
+    function populateBodyFonts() {
+      bodyFontSelect.innerHTML = "";
+      const fonts = fontPairs[selectedHeading][selectedVibe];
+      fonts.forEach(font => {
+        const option = document.createElement("option");
+        option.value = font;
+        option.textContent = font;
+        option.style.fontFamily = font;
+        bodyFontSelect.appendChild(option);
+      });
     }
 
-    updateHeadingFonts();
+    function updatePreview() {
+      previewHeading.style.fontFamily = headingFontSelect.value;
+      previewBody.style.fontFamily = bodyFontSelect.value;
+    }
+
+    function setupVibeButtons() {
+      vibeButtonsContainer.innerHTML = "";
+      vibes.forEach(vibe => {
+        const btn = document.createElement("button");
+        btn.textContent = vibe;
+        btn.className = vibe === selectedVibe ? "active" : "";
+        btn.onclick = () => {
+          selectedVibe = vibe;
+          vibeDescription.textContent = vibeDescriptions[vibe];
+          setupVibeButtons();
+          populateBodyFonts();
+          updatePreview();
+        };
+        vibeButtonsContainer.appendChild(btn);
+      });
+      vibeDescription.textContent = vibeDescriptions[selectedVibe];
+    }
+
+    headingFontSelect.onchange = (e) => {
+      selectedHeading = e.target.value;
+      populateBodyFonts();
+      updatePreview();
+    };
+
+    bodyFontSelect.onchange = updatePreview;
+
+    function copyFontPairing() {
+      const pairing = `Heading: ${headingFontSelect.value}\nBody: ${bodyFontSelect.value}\nStyle: ${selectedVibe}`;
+      navigator.clipboard.writeText(pairing).then(() => alert("Font pairing copied!"));
+    }
   </script>
 </body>
 </html>
