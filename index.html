@@ -17,12 +17,13 @@
       min-height: 100vh;
     }
     .container {
-      max-width: 800px;
+      max-width: 900px;
       margin: auto;
       background: white;
       padding: 3rem;
       border-radius: 15px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      width: 100%;
     }
     h1 {
       font-size: 28px;
@@ -31,7 +32,8 @@
       color: #333;
     }
     .section {
-      margin-bottom: 2rem;
+      display: inline-block;
+      margin-right: 2rem;
     }
     label {
       display: block;
@@ -42,11 +44,11 @@
     select, button {
       padding: 0.75rem;
       font-size: 1rem;
-      width: 100%;
+      width: 200px;
       border-radius: 8px;
       border: 1px solid #ddd;
-      margin-bottom: 1.25rem;
       transition: border 0.3s ease;
+      margin-bottom: 1rem;
     }
     select:hover, button:hover {
       border-color: #3b82f6;
@@ -57,12 +59,14 @@
       border: none;
       cursor: pointer;
       transition: background 0.3s ease;
+      padding: 1rem 2rem;
+      margin-left: 2rem;
     }
     button.copy-btn:hover {
       background: #2563eb;
     }
     .preview {
-      margin-top: 1.5rem;
+      margin-top: 2rem;
       padding: 2rem;
       border: 1px dashed #ccc;
       text-align: center;
@@ -89,26 +93,34 @@
       border-radius: 8px;
       margin-top: 1rem;
     }
+    .selectors-wrapper {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Font Pairing Explorer</h1>
 
-    <div class="section vibe-section">
-      <label for="vibe-dropdown">1. Choose a vibe</label>
-      <select id="vibe-dropdown"></select>
-      <p id="vibe-description" style="font-size: 0.9rem; color: #666; font-style: italic;"></p>
-    </div>
+    <div class="selectors-wrapper">
+      <div class="section vibe-section">
+        <label for="vibe-dropdown">1. Choose a vibe</label>
+        <select id="vibe-dropdown"></select>
+        <p id="vibe-description" style="font-size: 0.9rem; color: #666; font-style: italic;"></p>
+      </div>
 
-    <div class="section">
-      <label for="heading-font">2. Select heading font</label>
-      <select id="heading-font"></select>
-    </div>
+      <div class="section">
+        <label for="heading-font">2. Select heading font</label>
+        <select id="heading-font"></select>
+      </div>
 
-    <div class="section">
-      <label for="body-font">3. Select body font</label>
-      <select id="body-font"></select>
+      <div class="section">
+        <label for="body-font">3. Select body font</label>
+        <select id="body-font"></select>
+      </div>
     </div>
 
     <div class="preview" id="preview">
